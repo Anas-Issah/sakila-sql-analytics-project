@@ -2,4 +2,4 @@
 SELECT rating, COUNT(rating) AS film_count
 FROM film
 GROUP BY rating
-ORDER BY film_count;
+ORDER BY film_count DESC;
