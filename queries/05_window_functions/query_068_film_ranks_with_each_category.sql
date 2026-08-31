@@ -1,7 +1,7 @@
 --Rank films within their respective categories based on rental count.
 
 WITH film_rental_count AS (
-    SELECT i.film_id,COUNT(r.*) AS rental_count FROM inventory i
+    SELECT i.film_id,COUNT(r.rental_id) AS rental_count FROM inventory i
     INNER JOIN rental r 
     ON i.inventory_id = r.inventory_id
     GROUP BY i.film_id
