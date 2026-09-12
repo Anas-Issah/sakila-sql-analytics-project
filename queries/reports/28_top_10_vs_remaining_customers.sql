@@ -1,0 +1,26 @@
+WITH customers_total_spent AS(
+    SELECT SUM(total_spent) AS total_revenue
+    FROM customer_lifetime_value
+    ),
+top_10_revenue AS(
+    SELECT SUM(total_spent) AS top_revenue
+    FROM customer_lifetime_value
+    WHERE customer_rank <= 10
+),
+remaining_revenue AS(
+    SELECT SUM(total_spent) AS remaining_total
+    FROM customer_lifetime_value
+    WHERE customer_rank > 10
+)
+SELECT
+    (SELECT top_revenue FROM top_10_revenue) AS top_10_revenue,
+    (SELECT remaining_total FROM remaining_revenue) AS remaining_customers_revenue,
+    ROUND(
+        ((SELECT top_revenue FROM top_10_revenue)::NUMERIC/
+                (SELECT total_revenue FROM customers_total_spent)) * 100,2
+    ) AS top_10_revenue_percentage,
+    ROUND(
+        ((SELECT remaining_total FROM remaining_revenue)::NUMERIC/
+                (SELECT total_revenue FROM customers_total_spent)) * 100,2
+    ) AS remaining_customers_revenue_percentage
+    ;

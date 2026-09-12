@@ -4,9 +4,9 @@ CREATE OR REPLACE VIEW customer_spending_summary AS
     SELECT c.customer_id,CONCAT(c.first_name,' ',c.last_name) AS customer_name,COUNT(r.rental_id) AS rental_count,
         SUM(p.amount) AS total_spent, AVG(p.amount) AS average_payment
     FROM customer c 
-    INNER JOIN rental r 
+    LEFT JOIN rental r 
     ON c.customer_id = r.customer_id
-    INNER JOIN payment p 
+    LEFT JOIN payment p 
     ON r.rental_id = p.rental_id
     GROUP BY c.customer_id;
 
@@ -18,7 +18,7 @@ CREATE OR REPLACE VIEW customer_rental_summary AS
         MIN(r.rental_date) AS first_rental_date,MAX(r.rental_date) AS last_rental_date,
         MAX(r.rental_date)::DATE - MIN(r.rental_date)::DATE AS active_days
     FROM customer c
-    INNER JOIN rental r 
+    LEFT JOIN rental r 
     ON c.customer_id = r.customer_id
     GROUP BY c.customer_id;
 
@@ -44,8 +44,8 @@ CREATE OR REPLACE VIEW customer_lifetime_value AS
         SUM(p.amount) AS total_spent, AVG(p.amount) AS average_payment,
         ROW_NUMBER() OVER(ORDER BY SUM(p.amount) DESC) AS customer_rank
     FROM customer c 
-    INNER JOIN rental r 
+    LEFT JOIN rental r 
     ON c.customer_id = r.customer_id
-    INNER JOIN payment p 
+    LEFT JOIN payment p 
     ON r.rental_id = p.rental_id
     GROUP BY c.customer_id;
