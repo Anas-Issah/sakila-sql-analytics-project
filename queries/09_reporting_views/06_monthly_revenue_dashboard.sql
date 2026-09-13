@@ -1,4 +1,5 @@
-WITH monthly_totals AS (
+CREATE OR REPLACE VIEW monthly_revenue_dashboard AS
+    WITH monthly_totals AS (
     SELECT DATE_TRUNC('MONTH',r.rental_date)::DATE AS month,
         COUNT(r.rental_id) AS total_rentals,SUM(p.amount)AS total_revenue,
         ROUND(AVG(p.amount),2) AS average_revenue_per_rental

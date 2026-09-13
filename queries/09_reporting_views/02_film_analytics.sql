@@ -1,7 +1,8 @@
 
 --FILM PERFORMANCE SUMMARY
 CREATE OR REPLACE VIEW film_performance_summary AS
-    SELECT f.film_id,f.title,COUNT(r.rental_id) AS rental_count,SUM(p.amount) AS total_revenue,
+    SELECT f.film_id,f.title,COALESCE(COUNT(r.rental_id),0) AS rental_count,
+        COALESCE(SUM(p.amount),0) AS total_revenue,
         ROUND(SUM(p.amount)/COUNT(r.rental_id),2) AS average_revenue_per_rental
     FROM film f 
     LEFT JOIN inventory i 
